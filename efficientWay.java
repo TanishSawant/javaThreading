@@ -37,5 +37,19 @@ public class efficientWay {
             e.printStackTrace();
         }
         t2.start();
-    } 
+        try {
+            t1.join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            t2.join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        System.out.println(t1.isAlive());
+        System.out.println("Bye!");
+    }
 }
