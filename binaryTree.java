@@ -5,6 +5,7 @@ class NodeTree {
     int data;
     NodeTree leftNode;
     NodeTree rightNode;
+
     public NodeTree(int data) {
         this.data = data;
         this.rightNode = null;
@@ -14,10 +15,12 @@ class NodeTree {
 
 public class binaryTree {
     NodeTree root;
+
     binaryTree(int data) {
         this.root = new NodeTree(data);
     }
-    void insert(NodeTree node, int data){
+
+    synchronized void insert(NodeTree node, int data) {
         if (data < node.data) {
             if (node.leftNode != null) {
                 insert(node.leftNode, data);
@@ -36,25 +39,65 @@ public class binaryTree {
             }
         }
     }
-    void inOrderTraversal(NodeTree node){
-        if(node != null){
+
+    void inOrderTraversal(NodeTree node) {
+        if (node != null) {
             inOrderTraversal(node.leftNode);
             System.out.println(node.data);
             inOrderTraversal(node.rightNode);
         }
     }
+
     public static void main(String[] args) {
-     binaryTree bTree = new binaryTree(10);
-     bTree.insert(bTree.root, 11);   
-     bTree.insert(bTree.root, 13);   
-     bTree.insert(bTree.root, 1);   
-     bTree.insert(bTree.root, 5);   
-     bTree.insert(bTree.root, 7);   
-     bTree.insert(bTree.root, 9);   
-     bTree.insert(bTree.root, 3);   
-     bTree.insert(bTree.root, 16);   
-     bTree.insert(bTree.root, 12);   
-     bTree.insert(bTree.root, 4);
-     bTree.inOrderTraversal(bTree.root);   
+        long startTime = System.nanoTime();
+        binaryTree bTree = new binaryTree(10);
+        Thread t1 = new Thread(new Runnable() {
+            public void run() {
+                bTree.insert(bTree.root, 11);
+                bTree.insert(bTree.root, 5);
+                bTree.insert(bTree.root, 7);
+            }
+        });
+        Thread t2 = new Thread(new Runnable() {
+            public void run() {
+                bTree.insert(bTree.root, 9);
+                bTree.insert(bTree.root, 3);
+                bTree.insert(bTree.root, 4);
+            }
+        });
+        Thread t3 = new Thread(new Runnable() {
+            public void run() {
+                bTree.insert(bTree.root, 16);
+                bTree.insert(bTree.root, 12);
+                bTree.insert(bTree.root, 13);
+                bTree.insert(bTree.root, 1);
+            }
+        });
+
+        t1.start();
+        t2.start();
+        t3.start();
+        try {
+            t1.join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            t2.join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        try {
+            t3.join();
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        bTree.inOrderTraversal(bTree.root);
+        long endTime = System.nanoTime();
+        long time = endTime-startTime;
+        System.out.println("Time : " + time);   
     }
 }
