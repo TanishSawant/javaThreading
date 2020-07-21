@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * NodeTree
  */
@@ -15,7 +17,7 @@ class NodeTree {
 
 public class binaryTree {
     NodeTree root;
-
+    ArrayList<Integer> arrayForm = new ArrayList<Integer>();
     binaryTree(int data) {
         this.root = new NodeTree(data);
     }
@@ -37,6 +39,13 @@ public class binaryTree {
                     node.rightNode = new NodeTree(data);
                 }
             }
+        }
+    }
+    void getArrayFormOfTree(NodeTree node){
+        if (node != null) {
+            getArrayFormOfTree(node.leftNode);
+            this.arrayForm.add(node.data);
+            getArrayFormOfTree(node.rightNode);
         }
     }
 
@@ -98,6 +107,8 @@ public class binaryTree {
         bTree.inOrderTraversal(bTree.root);
         long endTime = System.nanoTime();
         long time = endTime-startTime;
+        bTree.getArrayFormOfTree(bTree.root);
+        System.out.println(bTree.arrayForm);
         System.out.println("Time : " + time);   
     }
 }
