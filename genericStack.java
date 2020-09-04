@@ -160,7 +160,7 @@ class StackPointers<T> implements myStack<T> {
         } else {
             Node cur = top;
             while (cur.next != null) {
-                System.out.print(cur.data + "->");
+                System.out.print(cur.data + " ");
                 cur = cur.next;
             }
         }
