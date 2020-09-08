@@ -1,3 +1,6 @@
+import java.text.MessageFormat;
+import java.util.Scanner;
+
 /**
  * CircularQueue
  */
@@ -87,10 +90,13 @@ public class circularQueue<T> implements mycircularQueue {
             return false;
         }
     }
+    protected void finalize() {
+        System.out.println("Garbage collector called!!");
+    }
 
     public static void main(String[] args) {
-        circularQueue <Integer> queue = new circularQueue<Integer>();
-        queue.display();
+        circularQueue <String> queue = new circularQueue<String>();
+/*         queue.display();
         queue.enQueue(5);
         queue.enQueue(9);
         queue.enQueue(6);
@@ -101,8 +107,44 @@ public class circularQueue<T> implements mycircularQueue {
         queue.enQueue(0);
         queue.display();
         queue.deQueue();
-        queue.display();
+ */        queue.display();
 
+        System.out.println("-------------------------Menu----------------------------");
+        System.out.println("Add operation signal         : 1");
+        System.out.println("Remove operation signal      : 2");
+        System.out.println("Display all signal statements: 3");
+        System.out.println("Quit                         : 4");
+        System.out.println("---------------------------------------------------------");
+        System.out.print("Enter your choice : ");
+        Scanner sc = new Scanner(System.in);
+        String choice = sc.nextLine();
+        while (choice != "4") {
+            int counter = 0;
+            System.out.println("Enter next Operation : ");
+            Scanner sc2 = new Scanner(System.in);
+            switch (sc.nextLine()) {
+                case "1":
+                    System.out.println("Enter the operation signal : ");
+                    String op = sc2.nextLine();
+                    queue.enQueue(op);
+                    counter++;
+                    break;
+                case "2":
+                    System.out.println(MessageFormat.format("Deleted {0} ", queue.front));
+                    queue.deQueue();
+                    counter++;
+                    break;
+                case "3":
+                    queue.display();
+                    counter++;
+                    break;
+                case "4":
+                    System.exit(0);
+                default:
+                    System.err.println("Wrong Input.");
+                    break;
+            }
+        }
         queue = null;
         System.gc();
     }
