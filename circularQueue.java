@@ -1,3 +1,6 @@
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Scanner;
 
@@ -96,54 +99,25 @@ public class circularQueue<T> implements mycircularQueue {
 
     public static void main(String[] args) {
         circularQueue <String> queue = new circularQueue<String>();
-/*         queue.display();
-        queue.enQueue(5);
-        queue.enQueue(9);
-        queue.enQueue(6);
-        queue.enQueue(3);
-        queue.enQueue(8);
-        queue.enQueue(2);
-        queue.enQueue(1);
-        queue.enQueue(0);
-        queue.display();
-        queue.deQueue();
- */        queue.display();
-
-        System.out.println("-------------------------Menu----------------------------");
-        System.out.println("Add operation signal         : 1");
-        System.out.println("Remove operation signal      : 2");
-        System.out.println("Display all signal statements: 3");
-        System.out.println("Quit                         : 4");
-        System.out.println("---------------------------------------------------------");
-        System.out.print("Enter your choice : ");
-        Scanner sc = new Scanner(System.in);
-        String choice = sc.nextLine();
-        while (choice != "4") {
-            int counter = 0;
-            System.out.println("Enter next Operation : ");
-            Scanner sc2 = new Scanner(System.in);
-            switch (sc.nextLine()) {
-                case "1":
-                    System.out.println("Enter the operation signal : ");
-                    String op = sc2.nextLine();
-                    queue.enQueue(op);
-                    counter++;
-                    break;
-                case "2":
-                    System.out.println(MessageFormat.format("Deleted {0} ", queue.front));
-                    queue.deQueue();
-                    counter++;
-                    break;
-                case "3":
-                    queue.display();
-                    counter++;
-                    break;
-                case "4":
-                    System.exit(0);
-                default:
-                    System.err.println("Wrong Input.");
-                    break;
+/* 
+ */      //queue.display();
+        System.out.println("Loading data from data.txt");
+        try {
+            File myObj = new File("data.txt");
+            Scanner myReader = new Scanner(myObj);
+            while (myReader.hasNextLine()) {
+            String data = myReader.nextLine();
+            queue.enQueue(data);
+            System.out.println(data);
             }
+            myReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        {
+        System.out.println("Displaying the order of traffic signals : ");
+        queue.display();
         }
         queue = null;
         System.gc();
