@@ -94,6 +94,20 @@ public class binaryTree {
         
     }
 
+    NodeTree deleNode(NodeTree root, int x){
+        if (root == null) {
+            return root;
+        }
+        if (root.data < x) {
+            root.rightNode = deleNode(root.rightNode, x);
+        }
+        else if(root.data > x){
+            root.leftNode = deleNode(root.leftNode, x);
+        }
+        
+        return root;
+    }
+
     public static void main(String[] args) {
         long startTime = System.nanoTime();
         binaryTree bTree = new binaryTree(10);

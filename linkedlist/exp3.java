@@ -254,6 +254,33 @@ class Linked_list implements LinkedList {
         System.out.println();
     }
 
+    public void sortList() {  
+        //Node current will point to head  
+        Node current = head, index = null;  
+        int temp;  
+          
+        if(head == null) {  
+            return;  
+        }  
+        else {  
+            while(current != null) {  
+                //Node index will point to node next to current  
+                index = current.next;  
+                  
+                while(index != null) {  
+                    //If current node's data is greater than index's node data, swap the data between them  
+                    if(current.data > index.data) {  
+                        temp = current.data;  
+                        current.data = index.data;  
+                        index.data = temp;  
+                    }  
+                    index = index.next;  
+                }  
+                current = current.next;  
+            }      
+        }  
+    }  
+/* 
     public Node mergeLists(Node A, Node B) {
         if (A == null)
             return B;
@@ -267,6 +294,22 @@ class Linked_list implements LinkedList {
             B.next = mergeLists(A, B.next);
             return B;
         }
+    }
+ */
+    public Linked_list mergeLinked_list(Linked_list A, Linked_list B) {
+        Linked_list newList = new Linked_list();
+        Node a = A.head;
+        Node b = B.head;
+        while (a.next != null) {
+            newList.insertAtTail(a.data);
+            a = a.next;
+        }
+        while (b.next != null) {
+            newList.insertAtTail(b.data);
+            b = b.next;
+        }
+        newList.sortList();
+        return newList;
     }
 
     protected void finalize() {
@@ -285,10 +328,10 @@ public class exp3 {
         Linked_list list1 = new Linked_list();
         Linked_list[] arr;
         list1.insertAtHead(2);
-        list1.insertAtHead(1);
-        list1.insertAtTail(3);
+        list1.insertAtHead(6);
         list1.insertAtTail(5);
-        list1.insertAtTail(6);
+        list1.insertAtTail(3);
+        list1.insertAtTail(1);
         list1.insertAtTail(7);
         list1.insertAtTail(9);
         list1.insertInSortedList(4);
@@ -306,12 +349,10 @@ public class exp3 {
         System.out.println(MessageFormat.format("Merging {0} and {1}", arr[0], arr[1]));
         System.out.print("Merged list:");
 
-        Node temp = list1.mergeLists(arr[0].head, arr[1].head);
-        Linked_list newList = new Linked_list();
-        newList.head = temp;
-        newList.PrintList();
+        Linked_list result = list1.mergeLinked_list(arr[0], arr[1]);
+        result.PrintList();
         //free memory
-        newList = null;
+        result = null;
         arr = null;
         list1 = null;
         System.gc();
