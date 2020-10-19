@@ -1,3 +1,4 @@
+import java.text.MessageFormat;
 import java.util.ArrayList;
 
 /**
@@ -57,109 +58,130 @@ public class binaryTree {
         }
     }
 
-    void printGivenLevel(NodeTree node, int level){
-        if (node == null) {
+    int findMin(NodeTree node) {
+        if (node == null)
+            return Integer.MAX_VALUE;
+
+        int res = node.data;
+        int left = findMin(node.leftNode);
+        int right = findMin(node.rightNode);
+
+        if (left < res)
+            res = left;
+        if (right < res)
+            res = right;
+
+        return res;
+    }
+
+    int findMax(NodeTree node) {
+        if (node == null)
+            return Integer.MIN_VALUE;
+
+        int res = node.data;
+        int left = findMin(node.leftNode);
+        int right = findMin(node.rightNode);
+
+        if (left > res)
+            res = left;
+        if (right > res)
+            res = right;
+
+        return res;
+    }
+
+    void printLeafNodes(NodeTree root) {
+        if (root == null) {
             return;
         }
-        else if (level == 1) {
-            System.out.println(node.data + ' ');
+        if (root.leftNode == null && root.rightNode == null) {
+            System.out.println(root.data);
+            return;
         }
-        else if (level > 1) {
-            printGivenLevel(node.leftNode, level-1);
-            printGivenLevel(node.rightNode, level-1);
+        if (root.leftNode != null) {
+            printLeafNodes(root.leftNode);
+        }
+        if (root.rightNode != null) {
+            printLeafNodes(root.rightNode);
         }
     }
 
-    void printLevelOrder(NodeTree node){
+    void printGivenLevel(NodeTree node, int level) {
+        if (node == null) {
+            return;
+        } else if (level == 1) {
+            System.out.println(node.data + ' ');
+        } else if (level > 1) {
+            printGivenLevel(node.leftNode, level - 1);
+            printGivenLevel(node.rightNode, level - 1);
+        }
+    }
+
+    void printLevelOrder(NodeTree node) {
         int h = height(node);
         for (int i = 1; i <= h; i++) {
             printGivenLevel(node, i);
         }
     }
 
-    int height(NodeTree node){
+    int height(NodeTree node) {
         if (node == null) {
             return 0;
         } else {
             int ldepth = height(node.leftNode);
             int rdepth = height(node.rightNode);
 
-            if(ldepth > rdepth){
+            if (ldepth > rdepth) {
                 return ldepth + 1;
-            }
-            else{
+            } else {
                 return rdepth + 1;
             }
         }
-        
+
     }
 
-    NodeTree deleNode(NodeTree root, int x){
+    NodeTree deleNode(NodeTree root, int x) {
         if (root == null) {
             return root;
         }
         if (root.data < x) {
             root.rightNode = deleNode(root.rightNode, x);
-        }
-        else if(root.data > x){
+        } else if (root.data > x) {
             root.leftNode = deleNode(root.leftNode, x);
         }
-        
+
         return root;
     }
 
-    public static void main(String[] args) {
-        long startTime = System.nanoTime();
-        binaryTree bTree = new binaryTree(10);
-        Thread t1 = new Thread(new Runnable() {
-            public void run() {
-                bTree.insert(bTree.node, 11);
-                bTree.insert(bTree.node, 5);
-                bTree.insert(bTree.node, 7);
-            }
-        });
-        Thread t2 = new Thread(new Runnable() {
-            public void run() {
-                bTree.insert(bTree.node, 9);
-                bTree.insert(bTree.node, 3);
-                bTree.insert(bTree.node, 4);
-            }
-        });
-        Thread t3 = new Thread(new Runnable() {
-            public void run() {
-                bTree.insert(bTree.node, 16);
-                bTree.insert(bTree.node, 12);
-                bTree.insert(bTree.node, 13);
-                bTree.insert(bTree.node, 1);
-            }
-        });
+    public NodeTree search(NodeTree root, int data) {
 
-        t1.start();
-        t2.start();
-        t3.start();
-        try {
-            t1.join();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        try {
-            t2.join();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        try {
-            t3.join();
-        } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        if (root == null || root.data == data)
+            return root;
+
+        // val is greater than root's data
+        if (root.data > data)
+            return search(root.leftNode, data);
+
+        // val is less than root's data
+        return search(root.rightNode, data);
+    }
+
+    public static void main(String[] args) {
+        binaryTree bTree = new binaryTree(10);
+        bTree.insert(bTree.node, 5);
+        bTree.insert(bTree.node, 1);
+        bTree.insert(bTree.node, 0);
+        bTree.insert(bTree.node, 22);
+        bTree.insert(bTree.node, 12);
+        bTree.insert(bTree.node, 54);
+        bTree.insert(bTree.node, 32);
+        bTree.insert(bTree.node, 56);
+        System.out.println("Inorder Traversal :");
         bTree.inOrderTraversal(bTree.node);
-        long endTime = System.nanoTime();
-        long time = endTime-startTime;
-        bTree.getArrayFormOfTree(bTree.node);
-        System.out.println(bTree.arrayForm);
-        System.out.println("Time : " + time);   
+        System.out.println(MessageFormat.format("Minimum value node is : {0}", bTree.findMin(bTree.node)));
+        System.out.println(MessageFormat.format("Maximum value node is : {0}", bTree.findMax(bTree.node)));
+        
+        NodeTree searchedNode = bTree.search(bTree.node, 56);
+        System.out.println("Node Found!");
     }
 }

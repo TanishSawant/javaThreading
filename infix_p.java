@@ -110,7 +110,7 @@ public class infix_p {
     }
 
     public static void main(String[] args) {
-        String exp = "(A-(B/C)*D+E)*F%G";
+        String exp = "M*Q-J+B/D";
         System.out.println("Infix Expression: " + exp);
         System.out.println("Postfix Expression: " + infixToPostFix(exp));
 
