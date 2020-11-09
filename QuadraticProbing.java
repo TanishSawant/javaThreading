@@ -1,143 +1,136 @@
+import java.text.MessageFormat;
 import java.util.Scanner;
- 
-/** Class QuadraticProbingHashTable **/
+
 class QuadraticProbingHashTable
 {    
-    private int currentSize, maxSize;       
-    private String[] keys;   
-    private String[] vals;    
- 
-    /** Constructor **/
+    private int currentSize, maxSize;
+    private int[] vals;    
+    
     public QuadraticProbingHashTable(int capacity) 
     {
         currentSize = 0;
         maxSize = capacity;
-        keys = new String[maxSize];
-        vals = new String[maxSize];
+        vals = new int[maxSize];
+        for(int i = 0; i < vals.length; i++){
+            vals[i] = Integer.MIN_VALUE;
+        }
+        
     }  
  
-    /** Function to clear hash table **/
     public void makeEmpty()
     {
         currentSize = 0;
-        keys = new String[maxSize];
-        vals = new String[maxSize];
+        vals = new int[maxSize];
     }
- 
-    /** Function to get size of hash table **/
+
     public int getSize() 
     {
         return currentSize;
     }
  
-    /** Function to check if hash table is full **/
     public boolean isFull() 
     {
         return currentSize == maxSize;
     }
  
-    /** Function to check if hash table is empty **/
     public boolean isEmpty() 
     {
         return getSize() == 0;
     }
  
-    /** Fucntion to check if hash table contains a key **/
-    public boolean contains(String key) 
+    public boolean contains(int val) 
     {
-        return get(key) !=  null;
+        return get(val) !=  Integer.MIN_VALUE;
     }
  
-    /** Functiont to get hash code of a given key **/
-    private int hash(String key) 
+    private int hash(int key) 
     {
-        return key.hashCode() % maxSize;
-    }    
- 
-    /** Function to insert key-value pair **/
-    public void insert(String key, String val) 
-    {                
-        int tmp = hash(key);
+        return key % maxSize;
+    }
+
+    public void insert(int val) 
+    {
+        //System.out.println(Integer.MIN_VALUE);
+        int tmp = hash(val);
         int i = tmp, h = 1;
-        do
+        if(vals[i] == Integer.MIN_VALUE){
+            vals[i] = val;
+            return;
+        }
+        i = i + 1;
+        while (i != tmp)
         {
-            if (keys[i] == null)
+            if (vals[i] == Integer.MIN_VALUE)
             {
-                keys[i] = key;
                 vals[i] = val;
                 currentSize++;
                 return;
             }
-            if (keys[i].equals(key)) 
-            { 
-                vals[i] = val; 
-                return; 
-            }            
-            i = (i + h * h++) % maxSize;            
-        } while (i != tmp);       
+            i = (tmp + h * h) % maxSize; 
+            h++;    
+        }
     }
  
-    /** Function to get value for a given key **/
-    public String get(String key) 
+    public int get(int val) 
     {
-        int i = hash(key), h = 1;
-        while (keys[i] != null)
+        int i = hash(val), h = 1;
+        while (vals[i] != Integer.MIN_VALUE)
         {
-            if (keys[i].equals(key))
+            if (vals[i] == val){
+                System.out.println(MessageFormat.format("{0} found at Location {1}", vals[i], i));
                 return vals[i];
+            }
             i = (i + h * h++) % maxSize;
-            System.out.println("i "+ i);
-        }            
-        return null;
+            //System.out.println("i "+ i);
+        }
+        return Integer.MIN_VALUE;
     }
- 
-    /** Function to remove key and its value **/
-    public void remove(String key)
+
+   public void remove(int val)
     {
-        if (!contains(key))
+        if (!contains(val))
             return;
 
-        /** find position key and delete **/
-        int i = hash(key), h = 1;
-        while (!key.equals(keys[i]))
+        int i = hash(val);
+        int h = 1;
+        while (val != vals[i])
             i = (i + h * h++) % maxSize;
-        keys[i] = vals[i] = null;
- 
-        /** rehash all keys **/        
-        for (i = (i + h * h++) % maxSize; keys[i] != null; i = (i + h * h++) % maxSize)
+        vals[i] = Integer.MIN_VALUE;
+        
+        for (i = (i + h * h++) % maxSize; vals[i] != Integer.MIN_VALUE; i = (i + h * h++) % maxSize)
         {
-            String tmp1 = keys[i], tmp2 = vals[i];
-            keys[i] = vals[i] = null;
-            currentSize--;  
-            insert(tmp1, tmp2);            
+            int tmp2 = vals[i];
+            vals[i] = Integer.MIN_VALUE;
+            currentSize--;
+            insert(tmp2);
         }
-        currentSize--;        
-    }       
+        currentSize--;
+    }
  
-    /** Function to print HashTable **/
     public void printHashTable()
     {
         System.out.println("\nHash Table: ");
         for (int i = 0; i < maxSize; i++)
-            if (keys[i] != null)
-                System.out.println(keys[i] +" "+ vals[i]);
+            if (vals[i] != Integer.MIN_VALUE)
+                System.out.println(vals[i]);
         System.out.println();
-    }   
+    }
+
+
 }
 
 public class QuadraticProbing
 {
     public static void main(String[] args)
     {
+
         Scanner scan = new Scanner(System.in);
         System.out.println("Hash Table Test\n\n");
         System.out.println("Enter size");
-        /** maxSizeake object of QuadraticProbingHashTable **/
-        QuadraticProbingHashTable qpht = new QuadraticProbingHashTable(scan.nextInt() );
- 
+        QuadraticProbingHashTable qpht = new QuadraticProbingHashTable(scan.nextInt());
+        qpht.printHashTable();
         char ch;
-        /**  Perform QuadraticProbingHashTable operations  **/
-        do    
+        do
         {
             System.out.println("\nHash Table Operations\n");
             System.out.println("1. insert ");
@@ -150,16 +143,16 @@ public class QuadraticProbing
             switch (choice)
             {
             case 1 : 
-                System.out.println("Enter key and value");
-                qpht.insert(scan.next(), scan.next() ); 
+                System.out.println("Enter value");
+                qpht.insert(scan.nextInt()); 
                 break;                          
             case 2 :                 
-                System.out.println("Enter key");
-                qpht.remove( scan.next() ); 
+                System.out.println("Enter value");
+                qpht.remove(scan.nextInt()); 
                 break;                        
             case 3 : 
-                System.out.println("Enter key");
-                System.out.println("Value = "+ qpht.get( scan.next() )); 
+                System.out.println("Enter value");
+                System.out.println("Value = "+ qpht.get(scan.nextInt()));
                 break;                                   
             case 4 : 
                 qpht.makeEmpty();
@@ -176,7 +169,9 @@ public class QuadraticProbing
             qpht.printHashTable();  
  
             System.out.println("\nDo you want to continue (Type y or n) \n");
-            ch = scan.next().charAt(0);                        
+            ch = scan.next().charAt(0);       
         } while (ch == 'Y'|| ch == 'y');  
+        scan.close();
+        qpht = null;
     }
 }
