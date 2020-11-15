@@ -15,6 +15,20 @@ class Node {
 
 public class dlinkedList {
     Node head, tail = null;
+    boolean isEmpty(){
+        if(this.head == null){
+            return true;
+        }
+        return false;
+    }
+
+    void destroy(){
+        int i=0;
+        while (!this.isEmpty()) {
+            this.removeLast();
+        }
+    }
+
     void addNode(int d){
         Node newNode = new Node(d);
         if (this.head == null && this.tail == null) {
@@ -27,6 +41,21 @@ public class dlinkedList {
             this.tail = newNode;
         }
     }
+
+
+    void prepend(int d){
+        if (this.head == null) {
+           this.head = new Node(d);
+           this.tail = this.head;
+           return;
+        }
+        Node newNode = new Node(d);
+        newNode.rNode = this.head;
+        this.head.lNode = newNode;
+        this.head = newNode;
+    }
+
+
     void displayNodes(){
         Node currentNode = this.head;
         if (this.head == null) {
@@ -68,11 +97,52 @@ public class dlinkedList {
     }
 
     public void removeLast(){
+        if (head == null) {
+            return;
+        }
         Node temp = this.tail;
         this.tail = this.tail.lNode;
+        if(temp == head) head = null;
         temp = null;
     }
 
+    public void removeGivenElement(int key){
+        Node temp = this.head;
+        if (this.tail.data == key) {
+            this.removeGivenNode(this.tail);
+            return;
+        }
+        while(temp.rNode != null){
+            System.out.println("Hellot" + temp.data);
+            if(temp.data == key){
+                System.out.println("Hello");
+                this.removeGivenNode(temp);
+            }
+            temp = temp.rNode;
+        }
+    }
+
+    void removeGivenNode(Node del)
+    {
+        System.out.println("Deleting");
+        if (head == null || del == null) {
+            System.out.println("Head was null");
+            return;
+        }
+
+        if (head == del) {
+            head = del.rNode;
+        }
+        if (del.rNode != null) {
+            del.rNode.lNode = del.lNode;
+        }
+        if (del.lNode != null) {
+            del.lNode.rNode = del.rNode;
+        }
+        System.out.println("Ok");
+        this.displayNodes();
+        return;
+    }
     public static void main(String[] args) {
         dlinkedList list1 = new dlinkedList();
         list1.displayNodes();

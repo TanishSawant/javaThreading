@@ -7,7 +7,6 @@ interface Cache {
 
 public class LRUCache implements Cache{
     private dlinkedList dlist;
-    private int size;
     private QuadraticProbingHashTable htable;
 
     LRUCache(int capacity) {
@@ -18,21 +17,27 @@ public class LRUCache implements Cache{
     @Override
     public int get(int key) {
         if (htable.contains(key)) {
-            //move to the front
+            this.dlist.removeGivenElement(key);
+            this.dlist.prepend(key);
         } else {
             if (!htable.isFull()) {
-                //Add to the front
+                this.dlist.prepend(key);
+                this.htable.insert(key);
             } else {
-                //remove rear element and add new page to the front
+                Node last = this.dlist.tail;
+                this.dlist.removeLast();
+                this.htable.remove(last.data);
+                this.dlist.prepend(key);
+                this.htable.insert(key);
             }
         }
-        return 0;
+        return key;
     }
 
     @Override
     public void clear(){
-        this.dlist = null;
-        this.htable = null;
+        this.dlist.destroy();
+        this.htable.makeEmpty();
     }
 
     public void printCache(){
@@ -42,8 +47,9 @@ public class LRUCache implements Cache{
         }
         Node cur = this.dlist.head;
         System.out.println("-------------------------------------------------------------");
-        while (cur.rNode != null) {
+        while (cur != null) {
             System.out.print(MessageFormat.format("{0} :: ", cur.data));
+            cur = cur.rNode;
         }
         System.out.println("--------------------------------------------------------------");
     }
@@ -51,5 +57,16 @@ public class LRUCache implements Cache{
     public static void main(String[] args) {
         LRUCache cache = new LRUCache(5);
         cache.printCache();
+        cache.get(1);
+        cache.get(2);
+        cache.get(3);
+        cache.get(3);
+        cache.printCache();
+        cache.clear();
+        //cache.clear();
+        cache.get(4);
+        cache.get(5);
+        cache.printCache();
+        //cache.clear();
     }
 }

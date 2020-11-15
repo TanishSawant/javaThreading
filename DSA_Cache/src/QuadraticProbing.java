@@ -20,7 +20,10 @@ class QuadraticProbingHashTable
     public void makeEmpty()
     {
         currentSize = 0;
-        vals = new int[maxSize];
+        this.vals = new int[maxSize];
+        for(int i=0; i<this.maxSize; i++){
+            this.vals[i] = Integer.MIN_VALUE;
+        }
     }
 
     public int getSize() 
@@ -70,10 +73,11 @@ class QuadraticProbingHashTable
             h++;    
         }
     }
- 
+
     public int get(int val) 
     {
-        int i = hash(val), h = 1;
+        //System.out.println(val);
+        int i = hash(val), h = 0;
         while (vals[i] != Integer.MIN_VALUE)
         {
             if (vals[i] == val){
