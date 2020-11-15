@@ -67,6 +67,12 @@ public class dlinkedList {
         }
     }
 
+    public void removeLast(){
+        Node temp = this.tail;
+        this.tail = this.tail.lNode;
+        temp = null;
+    }
+
     public static void main(String[] args) {
         dlinkedList list1 = new dlinkedList();
         list1.displayNodes();
