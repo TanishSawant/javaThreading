@@ -9,11 +9,10 @@ class QNode {
         this.next = null; 
     }
 } 
-
-
+  
 public class Queue { 
-    QNode front, rear;
-
+    QNode front, rear; 
+  
     public Queue() 
     { 
         this.front = this.rear = null; 
