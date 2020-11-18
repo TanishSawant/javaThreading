@@ -60,16 +60,17 @@ class QuadraticProbingHashTable
             return;
         }
         i = i + 1;
-        for (int quad=0; quad < maxSize*2; quad++ )
+        while (i != tmp)
         {
-            int index = tmp + quad*quad;
-            if (vals[index] == Integer.MIN_VALUE)
+            if (vals[i] == Integer.MIN_VALUE)
             {
-                vals[index] = val;
+                vals[i] = val;
                 currentSize++;
                 System.out.println(currentSize + "jflkda");
                 return;
             }
+            i = (tmp + h * h) % (maxSize*2); 
+            h++;    
         }
     }
 
@@ -111,7 +112,7 @@ class QuadraticProbingHashTable
     public void printHashTable()
     {
         System.out.println(currentSize);
-        System.out.println(maxSize*2);
+        System.out.println(maxSize);
         System.out.println("\nHash Table: ");
         for (int i = 0; i < maxSize*2; i++)
             if (vals[i] != Integer.MIN_VALUE)
