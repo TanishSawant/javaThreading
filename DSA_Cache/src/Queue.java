@@ -9,20 +9,18 @@ class QNode {
         this.next = null; 
     }
 } 
-  
+
+
 public class Queue { 
-    QNode front, rear; 
-  
+    QNode front, rear;
+
     public Queue() 
     { 
         this.front = this.rear = null; 
     } 
     
     boolean isEmpty(){
-        if (this.front == null) {
-            return true;
-        }
-        return false;
+        return this.front == null;
     }
 
     void enqueue(int key) 
@@ -42,7 +40,8 @@ public class Queue {
         if (this.front == null) 
             return; 
         QNode temp = this.front; 
-        this.front = this.front.next; 
+        this.front = temp.next; 
+        temp = null;
         if (this.front == null) 
             this.rear = null; 
     }

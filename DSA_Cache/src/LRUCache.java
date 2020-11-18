@@ -1,7 +1,7 @@
 import java.text.MessageFormat;
 
 interface Cache {
-    public int get(int key);
+    public int get(int value);
     public void clear();
 }
 
