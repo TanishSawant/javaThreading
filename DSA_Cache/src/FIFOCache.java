@@ -1,14 +1,11 @@
 public class FIFOCache implements Cache {
 
-    //private HashTable htable;
-    private HashTable<Integer> htable;
+    private QuadraticProbingHashTable htable;
     private Queue queue;
-    private int capacity = 0;
 
     FIFOCache(int capacity) {
-        this.queue = new Queue();   
-        this.htable = new HashTable<Integer>();
-        this.capacity = capacity;
+        this.queue = new Queue();
+        this.htable = new QuadraticProbingHashTable(capacity);
     }
 
     @Override
@@ -17,15 +14,15 @@ public class FIFOCache implements Cache {
             return key;
         }
         if(!this.htable.contains(key)){
-            if(this.htable.isFull(capacity)){
+            if(this.htable.isFull()){
                 QNode temp = this.queue.front;
                 this.htable.remove(temp.key);
-                this.htable.add(key);
+                this.htable.insert(key);
                 this.queue.dequeue();
                 this.queue.enqueue(key);
             }
             else{
-                this.htable.add(key);
+                this.htable.insert(key);
                 this.queue.enqueue(key);
             }
         }
@@ -49,21 +46,22 @@ public class FIFOCache implements Cache {
     }
 
     public static void main(String[] args) {
-        FIFOCache cache = new FIFOCache(10);
+        FIFOCache cache = new FIFOCache(5);
         cache.printCache();
         cache.get(1);
         cache.get(5);
         cache.get(9);
         cache.get(4);
         cache.get(2);
-        cache.get(4);
+        cache.htable.printHashTable();
+        cache.printCache();
+        cache.get(6);
         cache.get(7);
-        cache.get(19);
-        cache.get(33);
-        cache.get(12);
-        cache.get(123);
-        cache.get(43);
-        cache.get(57);
+        cache.htable.printHashTable();
+        cache.printCache();
+        cache.clear();
+        cache.get(1);
+        cache.get(3);
         cache.printCache();
     }
 }
