@@ -33,15 +33,19 @@ public class FIFOCache implements Cache {
     public void clear() {
         this.queue.destroy();
         this.htable.makeEmpty();
+        System.out.println("FIFO Cache has been emptied.");
     }
 
     public void printCache(){
         if(this.queue.isEmpty()){
-            System.out.println("Cache is Empty");
+            System.out.println("FIFO Cache is Empty");
         }
         else{
+            System.out.println("\n-----------------------------------------------------------");
+            System.out.println("Elements of the FIFO Cache is:");
             this.queue.printQueue();
-            System.out.println();
+            System.out.println("\n-----------------------------------------------------------");
+
         }
     }
 

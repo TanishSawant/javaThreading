@@ -1,7 +1,7 @@
 import java.text.MessageFormat;
 
 interface Cache {
-    public int get(int value);
+    public int get(int key);
     public void clear();
 }
 
@@ -38,20 +38,22 @@ public class LRUCache implements Cache{
     public void clear(){
         this.dlist.destroy();
         this.htable.makeEmpty();
+        System.out.println("LRU Cache has been emptied.");
     }
 
     public void printCache(){
         if (this.dlist.head == null) {
-            System.out.println("Cache is empty!");
+            System.out.println("LRU Cache is empty!");
             return;
         }
         Node cur = this.dlist.head;
         System.out.println("-------------------------------------------------------------");
+        System.out.println("Elements of the LRU Cache is:");
         while (cur != null) {
-            System.out.print(MessageFormat.format("{0} :: ", cur.data));
+            System.out.print(MessageFormat.format("{0} ", cur.data));
             cur = cur.rNode;
         }
-        System.out.println("--------------------------------------------------------------");
+        System.out.println("\n--------------------------------------------------------------");
     }
 
     public static void main(String[] args) {
@@ -60,13 +62,11 @@ public class LRUCache implements Cache{
         cache.get(1);
         cache.get(2);
         cache.get(3);
-        cache.get(3);
+        cache.get(2);
         cache.printCache();
         cache.clear();
-        //cache.clear();
         cache.get(4);
         cache.get(5);
         cache.printCache();
-        //cache.clear();
     }
 }

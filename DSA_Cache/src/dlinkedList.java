@@ -23,7 +23,6 @@ public class dlinkedList {
     }
 
     void destroy(){
-        int i=0;
         while (!this.isEmpty()) {
             this.removeLast();
         }
@@ -113,9 +112,7 @@ public class dlinkedList {
             return;
         }
         while(temp.rNode != null){
-            System.out.println("Hellot" + temp.data);
             if(temp.data == key){
-                System.out.println("Hello");
                 this.removeGivenNode(temp);
             }
             temp = temp.rNode;
@@ -124,23 +121,18 @@ public class dlinkedList {
 
     void removeGivenNode(Node del)
     {
-        System.out.println("Deleting");
-        if (head == null || del == null) {
-            System.out.println("Head was null");
+        if (head == null || del == null)
             return;
-        }
 
-        if (head == del) {
+        if (head == del) 
             head = del.rNode;
-        }
-        if (del.rNode != null) {
+
+        if (del.rNode != null) 
             del.rNode.lNode = del.lNode;
-        }
-        if (del.lNode != null) {
+
+        if (del.lNode != null) 
             del.lNode.rNode = del.rNode;
-        }
-        System.out.println("Ok");
-        this.displayNodes();
+
         return;
     }
     public static void main(String[] args) {
